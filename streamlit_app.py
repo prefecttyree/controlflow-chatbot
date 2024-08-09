@@ -1,9 +1,12 @@
-import streamlit as st
-from openai import OpenAI
 from prefect import flow, task
+from openai import OpenAI
+from pydantic import BaseModel
+import streamlit as st
 import marvin
-import marvin.audio
 
+
+
+@flow(name="is_openai_key_valid")
 def is_openai_key_valid(api_key):
     try:
         client = OpenAI(api_key=api_key)
@@ -13,7 +16,17 @@ def is_openai_key_valid(api_key):
         print("The OpenAI API key is invalid:", e)
         st.error("The OpenAI API key is invalid. Please check your key and try again.", icon="🚫")
 
+@task(name="create_openai_client")
+def create_openai_client(api_key):
+    client = OpenAI(api_key=api_key)
+    return client
 
+@task(name="create_session_state")
+def create_session_state():
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+@task(name="main")
 def main():
     # Show title and description.
     st.title("💬 Chatbot")
@@ -27,20 +40,19 @@ def main():
     # Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
     # via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
     openai_api_key = st.text_input("OpenAI API Key", type="password")
-    is_openai_key_valid(openai_api_key)
     print(openai_api_key)
     marvin.settings.openai_api_key = openai_api_key
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.", icon="🗝️")
+        is_openai_key_valid(openai_api_key) 
     else:
 
         # Create an OpenAI client.
-        client = OpenAI(api_key=openai_api_key)
+        client = create_openai_client(openai_api_key)
 
         # Create a session state variable to store the chat messages. This ensures that the
         # messages persist across reruns.
-        if "messages" not in st.session_state:
-            st.session_state.messages = []
+        create_session_state()
 
         # Display the existing chat messages via `st.chat_message`.
         for message in st.session_state.messages:
@@ -72,7 +84,7 @@ def main():
                 response = st.write_stream(stream)
             st.session_state.messages.append({"role": "assistant", "content": response})
             
-
+@flow(name="record_audio") 
 def record_audio():
     
     st.write(f"You said: {audio_data}")
@@ -100,4 +112,4 @@ def document_upload():
 
             
 if __name__ == "__main__":
-    main()
+    main.deploy(name="main",work_pool_name="marvin-chatbot")
