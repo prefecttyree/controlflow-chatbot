@@ -26,7 +26,7 @@ def create_session_state():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-@task(name="main")
+@flow(name="main")
 def main():
     # Show title and description.
     st.title("💬 Chatbot")
@@ -112,4 +112,6 @@ def document_upload():
 
             
 if __name__ == "__main__":
-    main.deploy(name="main",work_pool_name="marvin-chatbot")
+    main.deploy(name="main",
+                work_pool_name="gke-pool", 
+                image="DockerImage(image='ghcr.io/marvin-ai/marvin:latest')")
