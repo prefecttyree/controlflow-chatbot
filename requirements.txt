@@ -1,5 +1,0 @@
-prefect
-marvin
-openai
-streamlit
-pydantic

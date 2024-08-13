@@ -1,0 +1,8 @@
+prefect
+marvin
+openai
+streamlit
+pydantic
+prefect>=3.0.0
+prefect-docker>=0.4.0
+prefect-kubernetes>=0.3.1

@@ -1,5 +1,7 @@
 #!/bin/bash
-
+chmod +x ./push_to_docker.sh
+chmod +x ./push_to_gcp.sh
+chmod +x ./run.sh
 # Set your Docker Hub username
 DOCKERHUB_USERNAME="tytheprefectionist"
 
@@ -10,7 +12,7 @@ GIT_HASH=$(git rev-parse --short HEAD)
 docker build -t controlflow-chatbot .
 
 # Tag the image with the git hash
-docker tag controlflow-chatbot $DOCKERHUB_USERNAME/controlflow-chatbot: $GIT_HASH
+docker tag controlflow-chatbot $DOCKERHUB_USERNAME/controlflow-chatbot:$GIT_HASH
 
 # Log in to Docker Hub
 echo "Please enter your Docker Hub password:"

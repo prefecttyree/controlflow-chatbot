@@ -1,0 +1,6 @@
+worker:
+  cloudApiConfig:
+    accountId: "0ff44498-d380-4d7b-bd68-9b52da03823f"
+    workspaceId: "c05cdda3-bad1-43ae-845e-093d6fd22c82"
+  config:
+    workPool: "gke-pool"
