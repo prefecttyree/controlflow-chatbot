@@ -35,5 +35,7 @@ EXPOSE 8501
 
 # Copy the run script to the container
 COPY run.sh /home/appuser
+# Make the run.sh file executable
+RUN chmod +x /home/appuser/run.sh
 # Set the entrypoint to the run script
 ENTRYPOINT ["./run.sh"]
