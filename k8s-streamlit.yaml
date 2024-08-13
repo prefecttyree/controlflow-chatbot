@@ -17,7 +17,7 @@ spec:
       serviceAccountName: workload-identity
       containers:
         - name: streamlit
-          image: tytheprefectionist/controlflow-chatbot:7b8f6d5
+          image: tytheprefectionist/controlflow-chatbot:aab2a07
           imagePullPolicy: Always
           ports:
             - containerPort: 8501

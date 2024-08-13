@@ -9,7 +9,7 @@ DOCKERHUB_USERNAME="tytheprefectionist"
 GIT_HASH=$(git rev-parse --short HEAD)
 
 # Build the Docker image
-docker build --platform linux/amd64 -t controlflow-chatbot .
+docker buildx build --platform linux/amd64 -t  tytheprefectionist/controlflow-chatbot:arm64 .
 
 # Tag the image with the git hash
 docker tag controlflow-chatbot $DOCKERHUB_USERNAME/controlflow-chatbot:$GIT_HASH
